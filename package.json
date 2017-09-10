@@ -1,0 +1,26 @@
+{
+	"name": "thrift",
+	"description": "A language server example",
+	"author": "pd4d10",
+	"license": "MIT",
+	"version": "0.0.1",
+	"publisher": "pd4d10",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/pd4d10/vscode-thrift"
+	},
+	"scripts": {
+		"postinstall": "cd server && yarn && cd ../client && yarn && cd ..",
+		"compile": "tsc -p client/tsconfig.json && cd server && npm run installServer && cd .. && tsc -p server/tsconfig.json",
+		"compile:client": "tsc -p client/tsconfig.json",
+		"watch:client": "tsc -w -p client/tsconfig.json",
+		"compile:server": "cd server && npm run installServer && cd .. && tsc -p server/tsconfig.json",
+		"watch:server": "cd server && npm run installServer && cd .. && tsc -w -p server/tsconfig.json"
+	},
+	"devDependencies": {
+		"@types/mocha": "^2.2.42",
+		"@types/node": "^6.0.88",
+		"prettier": "^1.6.1",
+		"typescript": "^2.5.2"
+	}
+}
