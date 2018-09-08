@@ -2,15 +2,20 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"taskName": "compile",
+			"label": "compile",
 			"dependsOn": [
-				"compile:client",
-				"compile:server"
+				{
+					"type": "npm",
+					"script": "compile:client"
+				},
+				{
+					"type": "npm",
+					"script": "compile:server"
+				}
 			],
 			"problemMatcher": []
 		},
 		{
-			"label": "compile:client",
 			"type": "npm",
 			"script": "compile:client",
 			"group": "build",
@@ -23,7 +28,6 @@
 			]
 		},
 		{
-			"label": "compile:server",
 			"type": "npm",
 			"script": "compile:server",
 			"group": "build",
@@ -36,10 +40,16 @@
 			]
 		},
 		{
-			"taskName": "watch",
+			"label": "watch",
 			"dependsOn": [
-				"watch:client",
-				"watch:server"
+				{
+					"type": "npm",
+					"script": "watch:client"
+				},
+				{
+					"type": "npm",
+					"script": "watch:server"
+				}
 			],
 			"group": {
 				"kind": "build",
@@ -48,7 +58,6 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "watch:client",
 			"type": "npm",
 			"script": "watch:client",
 			"isBackground": true,
@@ -62,7 +71,6 @@
 			]
 		},
 		{
-			"label": "watch:server",
 			"type": "npm",
 			"script": "watch:server",
 			"isBackground": true,
