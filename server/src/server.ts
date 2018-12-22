@@ -45,6 +45,7 @@ connection.onInitialize((params: InitializeParams) => {
       completionProvider: {
         resolveProvider: true,
       },
+      hoverProvider: true,
     },
   }
 })
@@ -130,6 +131,13 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
   let problems = 0
   let diagnostics: Diagnostic[] = []
   while ((m = pattern.exec(text)) && problems < settings.maxNumberOfProblems) {
+    // Create a connection for the server. The connection uses
+    // stdian / stdout for message passing
+    let connection = createConnection(process.stdin, process.stdout)
+    connection.console.log(`Console test.`)
+
+    // const thriftDocument = parse(text)
+
     problems++
     let diagnosic: Diagnostic = {
       severity: DiagnosticSeverity.Warning,
@@ -191,20 +199,23 @@ connection.onCompletion(
   },
 )
 
+connection.onHover(({ textDocument, position }, token) => {
+  const source = textDocument.getText()
+  position.line
+})
+
 // This handler resolve additional information for the item selected in
 // the completion list.
-connection.onCompletionResolve(
-  (item: CompletionItem): CompletionItem => {
-    if (item.data === 1) {
-      ;(item.detail = 'TypeScript details'),
-        (item.documentation = 'TypeScript documentation')
-    } else if (item.data === 2) {
-      ;(item.detail = 'JavaScript details'),
-        (item.documentation = 'JavaScript documentation')
-    }
-    return item
-  },
-)
+connection.onCompletionResolve(item => {
+  if (item.data === 1) {
+    item.detail = 'TypeScript details'
+    item.documentation = 'TypeScript documentation'
+  } else if (item.data === 2) {
+    item.detail = 'JavaScript details'
+    item.documentation = 'JavaScript documentation'
+  }
+  return item
+})
 
 /*
 connection.onDidOpenTextDocument((params) => {

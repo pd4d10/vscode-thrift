@@ -1,16 +1,40 @@
 import * as path from 'path'
-import { workspace, ExtensionContext } from 'vscode'
-
+import {
+  workspace,
+  ExtensionContext,
+  languages,
+  TextDocument,
+  Hover,
+} from 'vscode'
 import {
   LanguageClient,
   LanguageClientOptions,
   ServerOptions,
   TransportKind,
+  Position,
+  CancellationToken,
 } from 'vscode-languageclient'
 
 let client: LanguageClient
+let source: string
 
 export function activate(context: ExtensionContext) {
+  context.subscriptions.push(
+    languages.registerHoverProvider('thrift', {
+      provideHover(
+        document: TextDocument,
+        position: Position,
+        token: CancellationToken,
+      ) {
+        const text = document.getText()
+        if (text === source) {
+        }
+
+        return new Hover('test')
+      },
+    }),
+  )
+
   // The server is implemented in node
   let serverModule = context.asAbsolutePath(
     path.join('server', 'out', 'server.js'),
@@ -33,11 +57,12 @@ export function activate(context: ExtensionContext) {
   // Options to control the language client
   let clientOptions: LanguageClientOptions = {
     // Register the server for plain text documents
-    documentSelector: [{ scheme: 'file', language: 'plaintext' }],
+    documentSelector: [{ scheme: 'file', language: 'thrift' }],
     synchronize: {
       // Notify the server about file changes to '.clientrc files contained in the workspace
       fileEvents: workspace.createFileSystemWatcher('**/.clientrc'),
     },
+    outputChannelName: 'xxx',
   }
 
   // Create the language client and start the client.
